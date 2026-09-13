@@ -5,51 +5,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Server wird gestartet...</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #fff;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0c10;
+      background-image: 
+        radial-gradient(circle at 50% 20%, rgba(40, 167, 69, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.05), transparent 40%);
+      color: #e6edf3;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
+      padding: 20px;
       text-align: center;
     }
     .card {
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      max-width: 90%;
-      width: 350px;
+      background: rgba(22, 27, 34, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6),
+                  0 0 15px 0 rgba(40, 167, 69, 0.2);
+      max-width: 100%;
+      width: 380px;
+      transition: all 0.3s ease;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #a5d6a7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .spinner {
-      border: 4px solid rgba(255,255,255,0.1);
-      width: 50px;
-      height: 50px;
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(255, 255, 255, 0.05);
       border-radius: 50%;
-      border-left-color: #28a745;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
+      border-top-color: #28a745;
+      border-right-color: #00d4ff;
+      animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+      margin: 25px auto;
+      box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
     #status {
-      font-size: 16px;
-      color: #aaa;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #8b949e;
+      margin-top: 15px;
+    }
+    .success-title {
+      color: #2ea44f;
+      font-size: 18px;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .btn-home {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-home:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(40, 167, 69, 0.45);
     }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <h2>Server Aufwecken 🚀</h2>
+  <h2>Server Status 🚀</h2>
   <div class="spinner" id="loader"></div>
-  <p id="status">Sende Signal an den Server...</p>
+  <p id="status">Sende Start-Signal in die Cloud...</p>
+  <div id="actionArea"></div>
 </div>
 
 <script>
@@ -57,6 +110,9 @@
   const GITHUB_USER = "VisionXRV";
   const REPO_NAME = "mc-server-waker";
   
+  // Platzhalter für den Link zur Startseite (hier deinen echten Ziel-Link eintragen)
+  const STARTSEITEN_LINK = "https://deine-startseite.de"; 
+
   // Trick: Wir teilen den Token in zwei Teile auf, damit GitHubs automatischer Scanner 
   // den Schlüssel beim Speichern nicht sofort wieder sperrt!
   const PART1 = "ghp_OxwttUMCl9XDBVVVvwKO";
@@ -66,6 +122,7 @@
   window.onload = function() {
     const status = document.getElementById("status");
     const loader = document.getElementById("loader");
+    const actionArea = document.getElementById("actionArea");
 
     fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/dispatches`, {
       method: "POST",
@@ -78,13 +135,18 @@
     })
     .then(response => {
       if (response.ok || response.status === 204) {
-        status.innerHTML = "✅ <b>Aufweck-Bot wurde losgeschickt!</b><br><br>Der Server fährt jetzt hoch. Du kannst die Seite schliessen und in ca. 45-60 Sekunden beitreten.";
         loader.style.display = "none";
+        status.innerHTML = "<span class='success-title'>✅ Server wurde gestartet</span>Der Server ist in 1 bis 2 Minuten online.";
+        
+        // Fügt den Zurück-Button ein
+        actionArea.innerHTML = `<a href="${STARTSEITEN_LINK}" class="btn-home">Zurück zur Startseite</a>`;
       } else {
+        loader.style.display = "none";
         status.innerText = "❌ Fehler (" + response.status + ") beim Senden. Bitte Token/Namen prüfen.";
       }
     })
     .catch(err => {
+      loader.style.display = "none";
       status.innerText = "❌ Netzwerkfehler beim Aufruf.";
     });
   };
