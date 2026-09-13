@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server wird gestartet...</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      max-width: 90%;
+      width: 350px;
+    }
+    .spinner {
+      border: 4px solid rgba(255,255,255,0.1);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border-left-color: #28a745;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    #status {
+      font-size: 16px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Server Aufwecken 🚀</h2>
+  <div class="spinner" id="loader"></div>
+  <p id="status">Sende Signal an den Server...</p>
+</div>
+
+<script>
+  // WICHTIG: Ersetze diese Werte durch deine eigenen Daten!
+  const GITHUB_USER = "DEIN_GITHUB_BENUTZERNAME";
+  const REPO_NAME = "mc-server-waker";
+  const TOKEN = "DEIN_GITHUB_TOKEN"; // Dein ghp_... Personal Access Token
+
+  // Das Skript startet SOFORT beim Öffnen der Seite:
+  window.onload = function() {
+    const status = document.getElementById("status");
+    const loader = document.getElementById("loader");
+
+    fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/dispatches`, {
+      method: "POST",
+      headers: {
+        "Authorization": `token ${TOKEN}`,
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ event_type: "wake_server" })
+    })
+    .then(response => {
+      if (response.ok || response.status === 204) {
+        status.innerHTML = "✅ <b>Aufweck-Bot wurde losgeschickt!</b><br><br>Der Server fährt jetzt hoch. Du kannst die Seite schliessen und in ca. 45-60 Sekunden beitreten.";
+        loader.style.display = "none";
+      } else {
+        status.innerText = "❌ Fehler beim Senden des Signals. Bitte Seite neu laden.";
+      }
+    })
+    .catch(err => {
+      status.innerText = "❌ Netzwerkfehler beim Aufruf.";
+    });
+  };
+</script>
+
+</body>
+</html>
