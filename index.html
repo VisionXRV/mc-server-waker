@@ -10,10 +10,10 @@
     }
     body {
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #0a0c10;
+      background: #050505;
       background-image: 
-        radial-gradient(circle at 50% 20%, rgba(40, 167, 69, 0.15), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.05), transparent 40%);
+        radial-gradient(circle at 50% 20%, rgba(40, 167, 69, 0.2), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(20, 80, 35, 0.15), transparent 50%);
       color: #e6edf3;
       display: flex;
       flex-direction: column;
@@ -25,14 +25,14 @@
       text-align: center;
     }
     .card {
-      background: rgba(22, 27, 34, 0.75);
+      background: rgba(15, 20, 15, 0.85);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(40, 167, 69, 0.3);
       padding: 40px 30px;
       border-radius: 20px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6),
-                  0 0 15px 0 rgba(40, 167, 69, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8),
+                  0 0 20px 0 rgba(40, 167, 69, 0.25);
       max-width: 100%;
       width: 380px;
       transition: all 0.3s ease;
@@ -42,7 +42,7 @@
       font-size: 24px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #ffffff 0%, #a5d6a7 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #28a745 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -53,10 +53,10 @@
       border: 3px solid rgba(255, 255, 255, 0.05);
       border-radius: 50%;
       border-top-color: #28a745;
-      border-right-color: #00d4ff;
+      border-right-color: #1e7e34;
       animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
       margin: 25px auto;
-      box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+      box-shadow: 0 0 15px rgba(40, 167, 69, 0.4);
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -65,34 +65,13 @@
     #status {
       font-size: 15px;
       line-height: 1.6;
-      color: #8b949e;
+      color: #a3b8a5;
       margin-top: 15px;
     }
-    .success-title {
-      color: #2ea44f;
-      font-size: 18px;
-      font-weight: bold;
+    .error-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
       display: block;
-      margin-bottom: 8px;
-    }
-    .btn-home {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 12px 24px;
-      background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-home:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(40, 167, 69, 0.45);
     }
   </style>
 </head>
@@ -110,11 +89,10 @@
   const GITHUB_USER = "VisionXRV";
   const REPO_NAME = "mc-server-waker";
   
-  // Platzhalter für den Link zur Startseite (hier deinen echten Ziel-Link eintragen)
+  // Platzhalter für den Link zur Startseite
   const STARTSEITEN_LINK = "https://visionxrv.github.io/Arsch-Attack/"; 
 
-  // Trick: Wir teilen den Token in zwei Teile auf, damit GitHubs automatischer Scanner 
-  // den Schlüssel beim Speichern nicht sofort wieder sperrt!
+  // Token-Aufteilung
   const PART1 = "ghp_OxwttUMCl9XDBVVVvwKO";
   const PART2 = "wMyK37dIJD0QtuMs";
   const TOKEN = PART1 + PART2;
@@ -122,7 +100,6 @@
   window.onload = function() {
     const status = document.getElementById("status");
     const loader = document.getElementById("loader");
-    const actionArea = document.getElementById("actionArea");
 
     fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/dispatches`, {
       method: "POST",
@@ -135,19 +112,16 @@
     })
     .then(response => {
       if (response.ok || response.status === 204) {
-        loader.style.display = "none";
-        status.innerHTML = "<span class='success-title'>✅ Server wurde gestartet</span>Der Server ist in 1 bis 2 Minuten online.";
-        
-        // Fügt den Zurück-Button ein
-        actionArea.innerHTML = `<a href="${STARTSEITEN_LINK}" class="btn-home">Zurück zur Startseite</a>`;
+        // Direkt zur Webseite weiterleiten
+        window.location.href = STARTSEITEN_LINK;
       } else {
         loader.style.display = "none";
-        status.innerText = "❌ Fehler (" + response.status + ") beim Senden. Bitte Token/Namen prüfen.";
+        status.innerHTML = "<span class='error-icon'>❌</span>Es ist ein Fehler aufgetreten, versuchen Sie es später.<br><br>Falls das Problem weiterhin besteht, kontaktiere bitte Carlos.";
       }
     })
     .catch(err => {
       loader.style.display = "none";
-      status.innerText = "❌ Netzwerkfehler beim Aufruf.";
+      status.innerHTML = "<span class='error-icon'>❌</span>Es ist ein Fehler aufgetreten, versuchen Sie es später.<br><br>Falls das Problem weiterhin besteht, kontaktiere bitte Carlos.";
     });
   };
 </script>
