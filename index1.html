@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Arsch Attack | Server wird hochgefahren</title>
+  <meta name="description"
+    content="Arsch Attack wird gerade hochgefahren. Es dauert 1–2 Minuten, bis der Server bereit ist.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050504;
+      --text: #f5f5f7;
+      --grey: #86868b;
+      --green: #8df542;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --apple: cubic-bezier(0.16, 1, 0.3, 1);
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --swipe: cubic-bezier(0.5, 0, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ---------- Hintergrund-Tiefe ---------- */
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .aurora {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+    }
+
+    .aurora.a1 {
+      width: 78vmax;
+      height: 78vmax;
+      top: -28%;
+      left: -18%;
+      background: radial-gradient(circle, rgba(141, 245, 66, 0.18), transparent 62%);
+      opacity: 0.8;
+      animation: drift 19s ease-in-out infinite alternate;
+    }
+
+    .aurora.a2 {
+      width: 68vmax;
+      height: 68vmax;
+      bottom: -34%;
+      right: -20%;
+      background: radial-gradient(circle, rgba(44, 185, 170, 0.14), transparent 62%);
+      opacity: 0.7;
+      animation: drift 26s ease-in-out infinite alternate-reverse;
+    }
+
+    .aurora.a3 {
+      width: 42vmax;
+      height: 42vmax;
+      top: 12%;
+      left: 50%;
+      margin-left: -21vmax;
+      background: radial-gradient(circle, rgba(141, 245, 66, 0.12), transparent 65%);
+      opacity: 0.9;
+      animation: breathe 9s ease-in-out infinite;
+    }
+
+    @keyframes drift {
+      to {
+        transform: translate(9vw, 6vh) scale(1.18);
+      }
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.55;
+      }
+      50% {
+        transform: scale(1.22);
+        opacity: 1;
+      }
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: -2px;
+      background-image:
+        linear-gradient(rgba(141, 245, 66, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(141, 245, 66, 0.05) 1px, transparent 1px);
+      background-size: 46px 46px;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 32%, #000 15%, transparent 100%);
+      mask-image: radial-gradient(70% 55% at 50% 32%, #000 15%, transparent 100%);
+      animation: gridCrawl 22s linear infinite;
+    }
+
+    @keyframes gridCrawl {
+      to {
+        background-position: 46px 46px;
+      }
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 120% at 50% 38%, transparent 55%, rgba(0, 0, 0, 0.62) 100%);
+    }
+
+    .glowline {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 50%;
+      height: 200px;
+      margin-top: -100px;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(141, 245, 66, 0.035), transparent);
+      animation: glowSweep 7s ease-in-out infinite;
+    }
+
+    @keyframes glowSweep {
+      0%, 100% {
+        transform: translateX(-6%);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translateX(6%);
+        opacity: 1;
+      }
+    }
+
+    /* ---------- Partikel ---------- */
+
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .p {
+      position: absolute;
+      bottom: -12px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(141, 245, 66, 0.9), 0 0 22px rgba(141, 245, 66, 0.45);
+      animation: rise var(--dur, 18s) linear infinite;
+      animation-delay: var(--delay, 0s);
+      opacity: 0;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.7);
+        opacity: 0;
+      }
+      6% {
+        opacity: var(--o, 0.55);
+      }
+      45% {
+        transform: translateY(-46vh) translateX(var(--x, 30px)) scale(1);
+      }
+      92% {
+        opacity: var(--o, 0.55);
+      }
+      100% {
+        transform: translateY(-104vh) translateX(calc(var(--x, 30px) * -0.6)) scale(0.6);
+        opacity: 0;
+      }
+    }
+
+    /* ---------- Stage ---------- */
+
+    .stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px 22px 44px;
+      width: min(100%, 560px);
+    }
+
+    .check-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 36px;
+      will-change: transform;
+    }
+
+    .check-wrap svg {
+      position: relative;
+      z-index: 2;
+      width: 172px;
+      height: 172px;
+      display: block;
+    }
+
+    .check-halo {
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(141, 245, 66, 0.22), transparent 68%);
+      animation: haloPulse 2.6s ease-in-out infinite;
+    }
+
+    @keyframes haloPulse {
+      0%, 100% {
+        transform: scale(0.9);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.14);
+        opacity: 1;
+      }
+    }
+
+    .shock {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 0;
+      width: 120px;
+      height: 120px;
+      margin: -60px 0 0 -60px;
+      border-radius: 50%;
+      border: 1px solid rgba(141, 245, 66, 0.7);
+      box-shadow: 0 0 24px rgba(141, 245, 66, 0.4), inset 0 0 18px rgba(141, 245, 66, 0.25);
+      opacity: 0;
+    }
+
+    body.go .shock {
+      animation: shockWave 1.1s ease-out 0.1s;
+    }
+
+    @keyframes shockWave {
+      0% {
+        transform: scale(0.35);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(7);
+        opacity: 0;
+      }
+    }
+
+    .c {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.92);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 339.29;
+      stroke-dashoffset: 339.29;
+      animation: draw 0.7s var(--ease) both;
+    }
+
+    .t {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 66;
+      stroke-dashoffset: 66;
+      filter: drop-shadow(0 0 16px rgba(141, 245, 66, 0.85));
+      animation: draw 0.5s var(--ease) 0.65s both;
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* ---------- Schrift ---------- */
+
+    h1.title {
+      font-size: clamp(30px, 6vw, 47px);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.12;
+    }
+
+    h1 .ln {
+      display: block;
+      background: linear-gradient(100deg, #ffffff 26%, #b4ff86 42%, #ffffff 58%, #ffffff 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 7s linear infinite;
+      opacity: 0;
+      transform: translateY(48px) scale(0.93);
+      filter: blur(11px);
+      transition:
+        opacity 0.75s var(--apple) var(--ld, 0s),
+        transform 1.05s var(--spring) var(--ld, 0s),
+        filter 0.7s var(--ease) var(--ld, 0s);
+      will-change: opacity, transform, filter;
+    }
+
+    body.go h1 .ln {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    @keyframes shine {
+      to {
+        background-position: 220% center;
+      }
+    }
+
+    .sub {
+      margin-top: 14px;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--grey);
+      line-height: 1.55;
+      max-width: 400px;
+    }
+
+    /* ---------- Buttons ---------- */
+
+    .actions {
+      margin-top: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 34px;
+      border-radius: 480px;
+      background: #fff;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      text-decoration: none;
+      min-width: 240px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: #f4f4f4;
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5), 0 0 34px rgba(141, 245, 66, 0.14);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .hint {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--grey);
+      line-height: 1.5;
+      max-width: 320px;
+    }
+
+    .hint b {
+      color: #cfd0d4;
+      font-weight: 600;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 480px;
+      border: 1px solid rgba(141, 245, 66, 0.45);
+      background: rgba(141, 245, 66, 0.06);
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: 0 0 22px rgba(141, 245, 66, 0.06);
+      transition: transform 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      animation: ghostPulse 3.4s ease-in-out infinite;
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-3px);
+      background: rgba(141, 245, 66, 0.13);
+      border-color: rgba(141, 245, 66, 0.8);
+      box-shadow: 0 0 36px rgba(141, 245, 66, 0.22);
+      animation: none;
+    }
+
+    @keyframes ghostPulse {
+      0%, 100% {
+        box-shadow: 0 0 12px rgba(141, 245, 66, 0.05);
+      }
+      50% {
+        box-shadow: 0 0 28px rgba(141, 245, 66, 0.16);
+      }
+    }
+
+    .btn-ghost svg {
+      width: 15px;
+      height: 15px;
+      flex: none;
+    }
+
+    /* ---------- Footer ---------- */
+
+    footer {
+      position: fixed;
+      bottom: 22px;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      color: rgba(255, 255, 255, 0.22);
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 1s var(--ease);
+    }
+
+    /* ---------- Ablauf ---------- */
+
+    body.go .check-wrap {
+      transform: translateY(-114px) scale(0.76);
+      opacity: 0.9;
+      transition: transform 1s var(--swipe) 0.05s, opacity 0.8s ease 0.05s;
+      margin-bottom: 2px;
+    }
+
+    .type .sub {
+      opacity: 0;
+      transform: translateY(26px);
+      filter: blur(6px);
+      transition:
+        opacity 0.7s var(--apple) 0.85s,
+        transform 1s var(--spring) 0.85s,
+        filter 0.6s var(--ease) 0.85s;
+    }
+
+    body.go .type .sub {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    .actions > * {
+      opacity: 0;
+      transform: translateY(30px) scale(0.96);
+      filter: blur(7px);
+      transition:
+        opacity 0.7s var(--apple) var(--ad, 0s),
+        transform 0.95s var(--spring) var(--ad, 0s),
+        filter 0.6s var(--ease) var(--ad, 0s);
+    }
+
+    body.go .actions > * {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    body.go footer {
+      opacity: 1;
+      transition-delay: 1.7s;
+    }
+
+    @media (max-width: 520px) {
+      .check-wrap,
+      .check-wrap svg {
+        width: 140px;
+        height: 140px;
+      }
+      body.go .check-wrap {
+        transform: translateY(-86px) scale(0.72);
+      }
+      .sub {
+        font-size: 15.5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001s !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="aurora a1"></div>
+    <div class="aurora a2"></div>
+    <div class="aurora a3"></div>
+    <div class="bg-grid"></div>
+    <div class="glowline"></div>
+    <div class="vignette"></div>
+  </div>
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <main class="stage">
+    <div class="check-wrap" id="checkWrap" aria-label="Bestätigt">
+      <div class="check-halo"></div>
+      <div class="shock"></div>
+      <svg viewBox="0 0 120 120">
+        <circle class="c" cx="60" cy="60" r="54" />
+        <path class="t" d="M38 64l15 15 29-34" />
+      </svg>
+    </div>
+
+    <div class="type">
+      <h1 class="title">
+        <span class="ln" style="--ld:.5s">Server wird jetzt</span>
+        <span class="ln" style="--ld:.63s">hochgefahren</span>
+      </h1>
+      <p class="sub">Es kann 1–2 Minuten dauern, bis alles bereit ist.</p>
+    </div>
+
+    <div class="actions">
+      <a class="btn-primary" href="../" style="--ad:1.05s">Zurück zur Hauptseite</a>
+      <p class="hint" style="--ad:1.28s">Wenn nichts passiert: warte <b>2–3 Minuten</b> und prüfe dann den Status.</p>
+      <a class="btn-ghost" href="https://mcstatus.io/status/java/arschattack.mcsh.io" target="_blank" rel="noopener"
+        style="--ad:1.42s">
+        Status prüfen
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 17 17 7M9 7h8v8" />
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <footer>Arsch Attack · Klassenserver 9c</footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* Partikel-Feld aufbauen */
+      var parts = document.getElementById("particles");
+      var count = window.innerWidth < 520 ? 16 : 28;
+      for (var i = 0; i < count; i++) {
+        var p = document.createElement("span");
+        p.className = "p";
+        var s = 2 + Math.random() * 3.5;
+        p.style.width = s + "px";
+        p.style.height = s + "px";
+        p.style.left = Math.random() * 100 + "%";
+        p.style.setProperty("--dur", (12 + Math.random() * 20) + "s");
+        p.style.setProperty("--delay", (-Math.random() * 30) + "s");
+        p.style.setProperty("--x", ((Math.random() * 140) - 70).toFixed(0) + "px");
+        p.style.setProperty("--o", (0.25 + Math.random() * 0.5).toFixed(2));
+        parts.appendChild(p);
+      }
+
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        document.body.classList.add("go");
+      } else {
+        setTimeout(function () {
+          document.body.classList.add("go");
+        }, 1400);
+      }
+    })();
+  </script>
+</body>
+
+</html>
