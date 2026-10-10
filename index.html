@@ -1,130 +1,576 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Server wird gestartet....</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #050505;
-      background-image: 
-        radial-gradient(circle at 50% 20%, rgba(40, 167, 69, 0.2), transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(20, 80, 35, 0.15), transparent 50%);
-      color: #e6edf3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-    .card {
-      background: rgba(15, 20, 15, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(40, 167, 69, 0.3);
-      padding: 40px 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8),
-                  0 0 20px 0 rgba(40, 167, 69, 0.25);
-      max-width: 100%;
-      width: 380px;
-      transition: all 0.3s ease;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #ffffff 0%, #28a745 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .spinner {
-      position: relative;
-      width: 60px;
-      height: 60px;
-      border: 3px solid rgba(255, 255, 255, 0.05);
-      border-radius: 50%;
-      border-top-color: #28a745;
-      border-right-color: #1e7e34;
-      animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-      margin: 25px auto;
-      box-shadow: 0 0 15px rgba(40, 167, 69, 0.4);
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    #status {
-      font-size: 15px;
-      line-height: 1.6;
-      color: #a3b8a5;
-      margin-top: 15px;
-    }
-    .error-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Arsch Attack | Bot wird geweckt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060705;
+            --panel: #0a0c08;
+            --text: #f2ede6;
+            --muted: #9c9486;
+            --faint: #5c574c;
+            --grass-l: #8df542;
+            --diamond: #2cb9aa;
+            --gold: #fcdb05;
+            --green: #3de07a;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --apple: cubic-bezier(0.16, 1, 0.3, 1);
+            --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* ---------- Hintergrund: dunkel & klar ---------- */
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background: var(--bg);
+        }
+
+        .bg-top {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(58% 42% at 50% 26%, rgba(141, 245, 66, 0.09), transparent 72%);
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(141, 245, 66, 0.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(141, 245, 66, 0.055) 1px, transparent 1px);
+            background-size: 44px 44px;
+            -webkit-mask-image: radial-gradient(58% 48% at 50% 34%, #000 8%, transparent 82%);
+            mask-image: radial-gradient(58% 48% at 50% 34%, #000 8%, transparent 82%);
+            animation: gridCrawl 26s linear infinite;
+        }
+
+        @keyframes gridCrawl {
+            to {
+                background-position: 44px 44px;
+            }
+        }
+
+        .vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(105% 95% at 50% 40%, transparent 42%, rgba(0, 0, 0, 0.9) 100%);
+        }
+
+        /* ---------- Partikel: filigran ---------- */
+
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .p {
+            position: absolute;
+            bottom: -8px;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: rgba(180, 255, 134, 0.9);
+            box-shadow: 0 0 6px rgba(141, 245, 66, 0.8);
+            animation: rise var(--dur, 5s) linear infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: var(--o, 0.7);
+            }
+
+            88% {
+                opacity: var(--o, 0.7);
+            }
+
+            100% {
+                transform: translateY(-104vh) translateX(var(--x, 24px));
+                opacity: 0;
+            }
+        }
+
+        /* ---------- Stage ---------- */
+
+        .stage {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px 22px 40px;
+            width: min(100%, 500px);
+        }
+
+        .core-wrap {
+            position: relative;
+            width: 176px;
+            height: 176px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 30px;
+        }
+
+        .core-glow {
+            position: absolute;
+            inset: 26px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(141, 245, 66, 0.28), transparent 68%);
+            filter: blur(18px);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                opacity: 0.55;
+                transform: scale(0.94);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+        }
+
+        .ring-svg {
+            position: relative;
+            z-index: 2;
+            width: 176px;
+            height: 176px;
+            display: block;
+            overflow: visible;
+        }
+
+        .track {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.07);
+            stroke-width: 3;
+        }
+
+        .progress {
+            fill: none;
+            stroke: var(--grass-l);
+            stroke-width: 3;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 60px 60px;
+            filter: drop-shadow(0 0 7px rgba(141, 245, 66, 0.85));
+        }
+
+        .dashed {
+            fill: none;
+            stroke: rgba(44, 185, 170, 0.5);
+            stroke-width: 2;
+            stroke-dasharray: 3 9;
+            transform-origin: 60px 60px;
+            animation: spin 14s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .bolt-wrap {
+            position: absolute;
+            z-index: 3;
+            width: 62px;
+            height: 62px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 38%, #17240c, #080d03 72%);
+            border: 1px solid rgba(141, 245, 66, 0.42);
+            box-shadow: 0 0 22px rgba(141, 245, 66, 0.35), inset 0 0 18px rgba(141, 245, 66, 0.18);
+            animation: boltPulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes boltPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 18px rgba(141, 245, 66, 0.28), inset 0 0 16px rgba(141, 245, 66, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 0 34px rgba(141, 245, 66, 0.6), inset 0 0 22px rgba(141, 245, 66, 0.3);
+            }
+        }
+
+        .bolt-wrap svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--grass-l);
+            filter: drop-shadow(0 0 8px rgba(141, 245, 66, 0.9));
+        }
+
+        /* ---------- Schrift: klarer Reveal ---------- */
+
+        h1.title {
+            font-size: clamp(26px, 5.6vw, 42px);
+            font-weight: 700;
+            letter-spacing: -0.6px;
+            line-height: 1.12;
+        }
+
+        h1 .ln {
+            display: block;
+            background: linear-gradient(100deg, #ffffff 30%, #b4ff86 46%, #ffffff 62%, #ffffff 100%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shine 6s linear infinite;
+            opacity: 0;
+            transform: translateY(26px);
+            filter: blur(7px);
+            transition:
+                opacity 0.6s var(--apple) var(--ld, 0s),
+                transform 0.8s var(--ease) var(--ld, 0s),
+                filter 0.6s var(--ease) var(--ld, 0s);
+            will-change: opacity, transform, filter;
+        }
+
+        body.go h1 .ln {
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 220% center;
+            }
+        }
+
+        .sub {
+            margin-top: 14px;
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--muted);
+            line-height: 1.55;
+            max-width: 400px;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.55s var(--ease) 0.3s, transform 0.7s var(--ease) 0.3s;
+        }
+
+        body.go .sub {
+            opacity: 1;
+            transform: none;
+        }
+
+        .sub .err {
+            color: #ff7a7a;
+            display: block;
+            font-weight: 500;
+        }
+
+        /* ---------- Prozent ---------- */
+
+        .pct {
+            margin-top: 22px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--faint);
+            opacity: 0;
+            transition: opacity 0.5s var(--ease) 0.5s;
+        }
+
+        body.go .pct {
+            opacity: 1;
+        }
+
+        .pct b {
+            color: var(--grass-l);
+            font-weight: 400;
+        }
+
+        /* ---------- Done ---------- */
+
+        .flash {
+            position: fixed;
+            inset: 0;
+            z-index: 5;
+            background: radial-gradient(circle at 50% 44%, rgba(180, 255, 134, 0.85), rgba(141, 245, 66, 0.25) 45%, transparent 74%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.done .flash {
+            animation: flashOut 0.45s ease-out forwards;
+        }
+
+        @keyframes flashOut {
+            0% {
+                opacity: 0;
+            }
+
+            35% {
+                opacity: 0.85;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        body.done .core-glow {
+            animation: none;
+            opacity: 1;
+            transform: scale(1.18);
+            filter: blur(22px);
+            transition: all 0.35s var(--ease);
+        }
+
+        body.done .progress {
+            stroke: #ffffff;
+            filter: drop-shadow(0 0 12px rgba(141, 245, 66, 1));
+        }
+
+        body.done .bolt-wrap {
+            animation: none;
+            box-shadow: 0 0 52px rgba(141, 245, 66, 0.95), inset 0 0 26px rgba(141, 245, 66, 0.5);
+            transform: scale(1.1);
+            transition: all 0.35s var(--spring);
+        }
+
+        /* ---------- Footer ---------- */
+
+        footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2.5px;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 1s var(--ease);
+        }
+
+        body.go footer {
+            opacity: 1;
+            transition-delay: 0.9s;
+        }
+
+        @media (max-width: 520px) {
+
+            .core-wrap,
+            .ring-svg {
+                width: 148px;
+                height: 148px;
+            }
+
+            .sub {
+                font-size: 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001s !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001s !important;
+            }
+        }
+    </style>
 </head>
+
 <body>
+    <div class="bg" aria-hidden="true">
+        <div class="bg-top"></div>
+        <div class="bg-grid"></div>
+        <div class="vignette"></div>
+    </div>
+    <div class="particles" id="particles" aria-hidden="true"></div>
+    <div class="flash" aria-hidden="true"></div>
 
-<div class="card">
-  <h2>Server Status 🚀</h2>
-  <div class="spinner" id="loader"></div>
-  <p id="status">Sende Start-Signal in die Cloud...</p>
-  <div id="actionArea"></div>
-</div>
+    <main class="stage">
+        <div class="core-wrap" aria-label="Bot wird geweckt">
+            <div class="core-glow"></div>
+            <svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="dashed" cx="60" cy="60" r="46" />
+                <circle class="track" cx="60" cy="60" r="54" />
+                <circle class="progress" id="progress" cx="60" cy="60" r="54" stroke-dasharray="339.292"
+                    stroke-dashoffset="339.292" />
+            </svg>
+            <div class="bolt-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z" />
+                </svg>
+            </div>
+        </div>
 
-<script>
-  // WICHTIG: Hier deine Daten eintragen!
-  const GITHUB_USER = "VisionXRV";
-  const REPO_NAME = "mc-server-waker";
-  
-  // Platzhalter für den Link zur Startseite
-  const STARTSEITEN_LINK = "https://visionxrv.github.io/Arsch-Attack/finish"; 
+        <h1 class="title">
+            <span class="ln" style="--ld:.1s">Server wird jetzt</span>
+            <span class="ln" style="--ld:.22s">geweckt</span>
+        </h1>
 
-  // Token-Aufteilung
-  const PART1 = "ghp_OxwttUMCl9XDBVVVvwKO";
-  const PART2 = "wMyK37dIJD0QtuMs";
-  const TOKEN = PART1 + PART2;
+        <p class="sub" id="status">Wake-Up-Signal wird in die Cloud gesendet ...</p>
 
-  window.onload = function() {
-    const status = document.getElementById("status");
-    const loader = document.getElementById("loader");
+        <div class="pct" id="pct"><b>0</b> %</div>
+    </main>
 
-    fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/dispatches`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${TOKEN}`,
-        "Accept": "application/vnd.github.v3+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ event_type: "wake_server" })
-    })
-    .then(response => {
-      if (response.ok || response.status === 204) {
-        // Direkt zur Webseite weiterleiten
-        window.location.href = STARTSEITEN_LINK;
-      } else {
-        loader.style.display = "none";
-        status.innerHTML = "<span class='error-icon'>❌</span>Es ist ein Fehler aufgetreten, versuchen Sie es später.<br><br>Falls das Problem weiterhin besteht, kontaktiere bitte Carlos.";
-      }
-    })
-    .catch(err => {
-      loader.style.display = "none";
-      status.innerHTML = "<span class='error-icon'>❌</span>Es ist ein Fehler aufgetreten, versuchen Sie es später.<br><br>Falls das Problem weiterhin besteht, kontaktiere bitte Carlos.";
-    });
-  };
-</script>
+    <footer>Arsch Attack · Klassenserver 9c</footer>
 
+    <script>
+        (function () {
+            "use strict";
+
+            /* ===== Mechanik (unverändert) ===== */
+            var GITHUB_USER = "VisionXRV";
+            var REPO_NAME = "mc-server-waker";
+            var STARTSEITEN_LINK = "https://visionxrv.github.io/Arsch-Attack/finish";
+
+            var PART1 = "ghp_OxwttUMCl9XDBVVVvwKO";
+            var PART2 = "wMyK37dIJD0QtuMs";
+            var TOKEN = PART1 + PART2;
+
+            /* Anzeige-Mindestdauer, bevor weitergeleitet wird */
+            var MIN_SHOW = 3000;
+            var t0 = Date.now();
+
+            /* ===== Partikel-Feld aufbauen ===== */
+            var parts = document.getElementById("particles");
+            var count = window.innerWidth < 520 ? 14 : 22;
+            for (var i = 0; i < count; i++) {
+                var p = document.createElement("span");
+                p.className = "p";
+                p.style.left = Math.random() * 100 + "%";
+                p.style.setProperty("--dur", (4.5 + Math.random() * 4) + "s");
+                p.style.setProperty("--delay", (-Math.random() * 8) + "s");
+                p.style.setProperty("--x", ((Math.random() * 90) - 45).toFixed(0) + "px");
+                p.style.setProperty("--o", (0.3 + Math.random() * 0.5).toFixed(2));
+                parts.appendChild(p);
+            }
+
+            var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var status = document.getElementById("status");
+            var progress = document.getElementById("progress");
+            var pct = document.getElementById("pct");
+            var CIRC = 339.292;
+
+            if (reduce) {
+                document.body.classList.add("go");
+            } else {
+                setTimeout(function () {
+                    document.body.classList.add("go");
+                }, 120);
+            }
+
+            /* Progress-Ring füllt sich über die Anzeigedauer */
+            var pstart = null;
+            function tick(ts) {
+                if (!pstart) pstart = ts;
+                var r = Math.min(1, (ts - pstart) / (MIN_SHOW - 150));
+                var eased = 1 - Math.pow(1 - r, 2);
+                progress.setAttribute("stroke-dashoffset", (CIRC * (1 - eased)).toFixed(2));
+                pct.innerHTML = "<b>" + Math.round(eased * 100) + "</b> %";
+                if (r < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+
+            /* ===== Ablauf ===== */
+            function goToStart() {
+                var elapsed = Date.now() - t0;
+                var wait = Math.max(0, MIN_SHOW - elapsed);
+                setTimeout(function () {
+                    progress.setAttribute("stroke-dashoffset", "0");
+                    pct.innerHTML = "<b>100</b> %";
+                    document.body.classList.add("done");
+                    setTimeout(function () {
+                        window.location.href = STARTSEITEN_LINK;
+                    }, reduce ? 0 : 420);
+                }, wait);
+            }
+
+            function showError() {
+                if (progress) progress.parentElement.style.display = "none";
+                if (pct) pct.style.display = "none";
+                status.innerHTML =
+                    "<span class='err'>❌ Es ist ein Fehler aufgetreten, versuchen Sie es später.<br><br>" +
+                    "Falls das Problem weiterhin besteht, kontaktiere bitte Carlos.</span>";
+            }
+
+            fetch("https://api.github.com/repos/" + GITHUB_USER + "/" + REPO_NAME + "/dispatches", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + TOKEN,
+                    "Accept": "application/vnd.github.v3+json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ event_type: "wake_server" })
+            })
+                .then(function (response) {
+                    if (response.ok || response.status === 204) {
+                        status.textContent = "Signal gesendet — Bot fährt hoch ...";
+                        goToStart();
+                    } else {
+                        showError();
+                    }
+                })
+                .catch(function () {
+                    showError();
+                });
+        })();
+    </script>
 </body>
+
 </html>
