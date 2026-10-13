@@ -3,7 +3,7 @@ const mineflayer = require('mineflayer');
 console.log('Starte Java-Join-Versuch für arschattack.mcsh.io...');
 
 const bot = mineflayer.createBot({
-  host: 'arschattack.mcsh.io',
+  host: 'arsch-attack.mcsh.gg',
   port: 25565,
   username: 'WakeUpBot',
   version: '1.21.1'
